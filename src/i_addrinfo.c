@@ -21,9 +21,11 @@
 #include <winsock.h>
 #endif
 #else
+#ifndef NONET
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#endif
 #endif
 
 #include "i_addrinfo.h"

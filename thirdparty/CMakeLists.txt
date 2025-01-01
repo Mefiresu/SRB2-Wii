@@ -18,4 +18,4 @@ if(NOT "${SRB2_CONFIG_SYSTEM_LIBRARIES}")
 	include("cpm-openmpt.cmake")
 endif()
 
-include("cpm-libgme.cmake")
+# include("cpm-libgme.cmake")

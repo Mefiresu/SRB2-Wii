@@ -61,7 +61,7 @@ option(
 	"Link dependencies using CMake's find_package and do not use internal builds"
 	${SRB2_CONFIG_SYSTEM_LIBRARIES_DEFAULT}
 )
-option(SRB2_CONFIG_ENABLE_TESTS "Build the test suite" ON)
+option(SRB2_CONFIG_ENABLE_TESTS "Build the test suite" OFF)
 # This option isn't recommended for distribution builds and probably won't work (yet).
 cmake_dependent_option(
 	SRB2_CONFIG_SHARED_INTERNAL_LIBRARIES
@@ -69,7 +69,7 @@ cmake_dependent_option(
 	OFF "NOT SRB2_CONFIG_SYSTEM_LIBRARIES"
 	OFF
 )
-option(SRB2_CONFIG_HWRENDER "Enable hardware render (OpenGL) support" ON)
+option(SRB2_CONFIG_HWRENDER "Enable hardware render (OpenGL) support" OFF)
 option(SRB2_CONFIG_STATIC_OPENGL "Enable static linking GL (do not do this)" OFF)
 option(SRB2_CONFIG_ERRORMODE "Compile C code with warnings treated as errors." OFF)
 option(SRB2_CONFIG_DEBUGMODE "Compile with PARANOIA, ZDEBUG, RANGECHECK and PACKETDROP defined." OFF)
@@ -126,11 +126,11 @@ add_subdirectory(thirdparty)
 
 if("${SRB2_CONFIG_SYSTEM_LIBRARIES}")
 	find_package(ZLIB REQUIRED)
-	find_package(PNG REQUIRED)
+	# find_package(PNG REQUIRED)
 	find_package(SDL2 REQUIRED)
 	find_package(SDL2_mixer REQUIRED)
-	find_package(CURL REQUIRED)
-	find_package(OPENMPT REQUIRED)
+	# find_package(CURL REQUIRED)
+	# find_package(OPENMPT REQUIRED)
 
 	# libgme defaults to "Nuked" YM2612 emulator, which is
 	# very SLOW. The system library probably uses the

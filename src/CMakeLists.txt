@@ -170,19 +170,19 @@ if("${CMAKE_SYSTEM_NAME}" MATCHES "Darwin")
 	target_compile_definitions(SRB2SDL2 PRIVATE -DMACOSX)
 endif()
 
-target_link_libraries(SRB2SDL2 PRIVATE gme)
-target_compile_definitions(SRB2SDL2 PRIVATE -DHAVE_GME)
-if(NOT "${SRB2_CONFIG_SYSTEM_LIBRARIES}")
-	# this sucks but gme doesn't use modern cmake to delineate public headers
-	target_include_directories(SRB2SDL2 PRIVATE "${libgme_SOURCE_DIR}")
-endif()
+# target_link_libraries(SRB2SDL2 PRIVATE gme)
+# target_compile_definitions(SRB2SDL2 PRIVATE -DHAVE_GME)
+# if(NOT "${SRB2_CONFIG_SYSTEM_LIBRARIES}")
+# 	# this sucks but gme doesn't use modern cmake to delineate public headers
+# 	target_include_directories(SRB2SDL2 PRIVATE "${libgme_SOURCE_DIR}")
+# endif()
 
-target_link_libraries(SRB2SDL2 PRIVATE openmpt)
-target_compile_definitions(SRB2SDL2 PRIVATE -DHAVE_OPENMPT)
+# target_link_libraries(SRB2SDL2 PRIVATE openmpt)
+# target_compile_definitions(SRB2SDL2 PRIVATE -DHAVE_OPENMPT)
 
-target_link_libraries(SRB2SDL2 PRIVATE ZLIB::ZLIB PNG::PNG CURL::libcurl)
-target_compile_definitions(SRB2SDL2 PRIVATE -DHAVE_ZLIB -DHAVE_PNG -DHAVE_CURL -D_LARGEFILE64_SOURCE)
-target_sources(SRB2SDL2 PRIVATE apng.c)
+target_link_libraries(SRB2SDL2 PRIVATE ZLIB::ZLIB)
+target_compile_definitions(SRB2SDL2 PRIVATE -DHAVE_ZLIB -D_LARGEFILE64_SOURCE)
+# target_sources(SRB2SDL2 PRIVATE apng.c)
 
 set(SRB2_HAVE_THREADS ON)
 target_compile_definitions(SRB2SDL2 PRIVATE -DHAVE_THREADS)
@@ -317,6 +317,7 @@ target_compile_options(SRB2SDL2 PRIVATE
 		$<$<VERSION_GREATER_EQUAL:$<C_COMPILER_VERSION>,9.1.0>:
 			-Wno-error=address-of-packed-member
 		>
+		-ffunction-sections -fdata-sections
 	>
 
 	# C, Clang and Apple Clang
@@ -364,6 +365,10 @@ target_link_options(SRB2SDL2 PRIVATE
 		# -Wl,--as-needed   - Was controlled by NOLDWARNING
 	>
 )
+target_compile_definitions(SRB2SDL2 PRIVATE -DNONET)
+target_compile_definitions(SRB2SDL2 PRIVATE -DNOMD5)
+target_compile_definitions(SRB2SDL2 PRIVATE -DNOGME)
+target_compile_definitions(SRB2SDL2 PRIVATE -DNOOPENMPT)
 
 if(${SRB2_CONFIG_DEV_BUILD})
 	target_compile_definitions(SRB2SDL2 PRIVATE -DDEVELOP)
@@ -395,19 +400,19 @@ endif()
 
 # strip debug symbols into separate file when using gcc.
 # to be consistent with Makefile, don't generate for OS X.
-if((CMAKE_COMPILER_IS_GNUCC) AND NOT ("${CMAKE_SYSTEM_NAME}" MATCHES Darwin))
-	if((${CMAKE_BUILD_TYPE} MATCHES Debug) OR (${CMAKE_BUILD_TYPE} MATCHES RelWithDebInfo))
-		if(${CMAKE_BUILD_TYPE} MATCHES Debug)
-			set(OBJCOPY_ONLY_KEEP_DEBUG "--only-keep-debug")
-		endif()
-		message(STATUS "Will make separate debug symbols in *.debug")
-		add_custom_command(TARGET SRB2SDL2 POST_BUILD
-			COMMAND ${OBJCOPY} ${OBJCOPY_ONLY_KEEP_DEBUG} $<TARGET_FILE:SRB2SDL2> $<TARGET_FILE:SRB2SDL2>.debug
-			COMMAND ${OBJCOPY} --strip-debug $<TARGET_FILE:SRB2SDL2>
-			COMMAND ${OBJCOPY} --add-gnu-debuglink=$<TARGET_FILE:SRB2SDL2>.debug $<TARGET_FILE:SRB2SDL2>
-		)
-	endif()
-endif()
+# if((CMAKE_COMPILER_IS_GNUCC) AND NOT ("${CMAKE_SYSTEM_NAME}" MATCHES Darwin))
+# 	if((${CMAKE_BUILD_TYPE} MATCHES Debug) OR (${CMAKE_BUILD_TYPE} MATCHES RelWithDebInfo))
+# 		if(${CMAKE_BUILD_TYPE} MATCHES Debug)
+# 			set(OBJCOPY_ONLY_KEEP_DEBUG "--only-keep-debug")
+# 		endif()
+# 		message(STATUS "Will make separate debug symbols in *.debug")
+# 		add_custom_command(TARGET SRB2SDL2 POST_BUILD
+# 			COMMAND ${OBJCOPY} ${OBJCOPY_ONLY_KEEP_DEBUG} $<TARGET_FILE:SRB2SDL2> $<TARGET_FILE:SRB2SDL2>.debug
+# 			COMMAND ${OBJCOPY} --strip-debug $<TARGET_FILE:SRB2SDL2>
+# 			COMMAND ${OBJCOPY} --add-gnu-debuglink=$<TARGET_FILE:SRB2SDL2>.debug $<TARGET_FILE:SRB2SDL2>
+# 		)
+# 	endif()
+# endif()
 
 # copy DLLs to bin/ directory if building internal shared on windows
 if("${CMAKE_SYSTEM_NAME}" STREQUAL Windows AND NOT "${SRB2_CONFIG_INTERNAL_LIBRARIES}" AND "${SRB2_CONFIG_SHARED_INTERNAL_LIBRARIES}")
