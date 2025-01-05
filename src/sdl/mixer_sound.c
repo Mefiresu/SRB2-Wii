@@ -79,7 +79,7 @@
 #define GME_BASS 1.0f
 #endif // HAVE_GME
 
-static UINT16 BUFFERSIZE = 2048;
+static UINT16 BUFFERSIZE = 256;
 static UINT16 SAMPLERATE = 44100;
 
 #ifdef HAVE_OPENMPT
