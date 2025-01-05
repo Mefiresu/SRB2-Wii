@@ -363,12 +363,18 @@ endif()
 target_link_options(SRB2SDL2 PRIVATE
 	$<$<C_COMPILER_ID:GNU>:
 		# -Wl,--as-needed   - Was controlled by NOLDWARNING
+		-Wl,--gc-sections
+		-Wl,--strip-all
+		-Wl,--Map,output.map
 	>
 )
 target_compile_definitions(SRB2SDL2 PRIVATE -DNONET)
 target_compile_definitions(SRB2SDL2 PRIVATE -DNOMD5)
 target_compile_definitions(SRB2SDL2 PRIVATE -DNOGME)
 target_compile_definitions(SRB2SDL2 PRIVATE -DNOOPENMPT)
+if("${CMAKE_SYSTEM_NAME}" MATCHES NintendoWii)
+	ogc_create_dol(SRB2SDL2)
+endif()
 
 if(${SRB2_CONFIG_DEV_BUILD})
 	target_compile_definitions(SRB2SDL2 PRIVATE -DDEVELOP)

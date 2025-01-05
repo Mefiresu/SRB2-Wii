@@ -1476,7 +1476,7 @@ void D_SRB2Main(void)
 
 	HU_Init();
 
-	CON_Init();
+	srb2_CON_Init();
 
 	D_RegisterServerCommands();
 	D_RegisterClientCommands(); // be sure that this is called before D_CheckNetGame

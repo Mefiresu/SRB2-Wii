@@ -419,7 +419,7 @@ static void CON_SetupColormaps(void)
 
 // Setup the console text buffer
 //
-void CON_Init(void)
+void srb2_CON_Init(void)
 {
 	INT32 i;
 

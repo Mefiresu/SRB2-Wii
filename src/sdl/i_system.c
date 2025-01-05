@@ -143,6 +143,11 @@ typedef LPVOID (WINAPI *p_MapViewOfFile) (HANDLE, DWORD, DWORD, DWORD, SIZE_T);
 #define UNIXBACKTRACE
 #endif
 
+#if defined (__wii__)
+#define NOCWD
+#define NOHOME
+#endif
+
 // Locations to directly check for srb2.pk3 in
 const char *wadDefaultPaths[] = {
 #if defined (__unix__) || defined(__APPLE__) || defined (UNIXCOMMON)
@@ -153,6 +158,9 @@ const char *wadDefaultPaths[] = {
 #elif defined (_WIN32)
 	"c:\\games\\srb2",
 	"\\games\\srb2",
+#elif defined (__wii__)
+	"sd:/SRB2",
+	"usb:/SRB2",
 #endif
 	NULL
 };
@@ -166,6 +174,9 @@ const char *wadSearchPaths[] = {
 #elif defined (_WIN32)
 	"c:\\games",
 	"\\games",
+#elif defined (__wii__)
+	"sd:/SRB2",
+	"usb:/SRB2",
 #endif
 	NULL
 };
@@ -2590,7 +2601,7 @@ void I_RemoveExitFunc(void (*func)())
 	}
 }
 
-#if !(defined (__unix__) || defined(__APPLE__) || defined (UNIXCOMMON))
+#if !(defined (__unix__) || defined(__APPLE__) || defined (UNIXCOMMON)) && defined(LOGMESSAGES)
 static void Shittycopyerror(const char *name)
 {
 	I_OutputMsg(
@@ -2748,7 +2759,7 @@ char *I_GetUserName(void)
 INT32 I_mkdir(const char *dirname, INT32 unixright)
 {
 //[segabor]
-#if defined (__unix__) || defined(__APPLE__) || defined (UNIXCOMMON) || defined (__CYGWIN__)
+#if defined (__unix__) || defined(__APPLE__) || defined (UNIXCOMMON) || defined (__CYGWIN__) || defined (__wii__)
 	return mkdir(dirname, unixright);
 #elif defined (_WIN32)
 	UNREFERENCED_PARAMETER(unixright); /// \todo should implement ntright under nt...
